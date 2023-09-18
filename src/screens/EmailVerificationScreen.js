@@ -9,7 +9,7 @@ import {BUTTON_TITLE, HEADER_TITLE, MESSAGES} from '../constants/messages';
 
 const EmailVerificationScreen = ({navigation}) => {
   const route = useRoute();
-  //   const {emailOrUsername} = route.params;
+  const {email} = route.params;
 
   return (
     <View style={styles.container}>
@@ -17,12 +17,13 @@ const EmailVerificationScreen = ({navigation}) => {
       <View style={styles.welcomeTxtContainer}>
         <Text style={styles.welcomeTxt}>
           {MESSAGES.VERIFICATION_EMAIL_SEND_FIRST}
-          <Text style={styles.emailOrUsernameTxt}> </Text>{' '}
+          <Text style={styles.emailOrUsernameTxt}> {email} </Text>
           {MESSAGES.VERIFICATION_EMAIL_SEND_LAST}
         </Text>
         <CButton
           title={BUTTON_TITLE.CONTINUE}
           extraStyles={{width: '90%', marginTop: verticalScale(15)}}
+          onPress={()=>navigation.replace('DashboardScreen',{email})}
         />
       </View>
     </View>

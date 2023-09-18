@@ -21,11 +21,12 @@ import {
   VALIDATION_MESSAGES,
 } from '../constants/messages';
 import {notifyMessage} from '../helpers/toastMessageHelpers';
+import {validateEmail} from '../helpers/validationHelpers';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
   const [formFields, setFormFields] = useState({
-    emailOrUsername: '',
+    email: '',
     password: '',
   });
   const [formErrors, setFormErrors] = useState({});
@@ -33,9 +34,13 @@ const LoginScreen = () => {
   const handleAuthentication = () => {
     const errors = {};
 
-    if (!formFields.emailOrUsername) {
-      errors.emailOrUsername =
-        VALIDATION_MESSAGES.PLEASE_ENTER_EMAIL_OR_USERNAME;
+    if (!formFields.email) {
+      errors.email = VALIDATION_MESSAGES.PLEASE_ENTER_EMAIL_OR_USERNAME;
+    } else if (
+      formFields.email.includes('@') &&
+      !validateEmail(formFields.email)
+    ) {
+      errors.email = VALIDATION_MESSAGES.PLEASE_ENTER_VALID_EMAIL_ID;
     }
 
     if (!formFields.password) {
@@ -45,38 +50,26 @@ const LoginScreen = () => {
     // Set the errors in the formError state
     setFormErrors(errors);
 
-    // If there are errors, stop submitting the form
-    // if (Object.keys(errors).length > 0) {
-    //   Object.keys(errors).forEach(key => {
-    //     notifyMessage(errors[key]);
-    //   });
-    //   return;
-    // }
-
-    if (errors.emailOrUsername) {
-      notifyMessage(errors.emailOrUsername);
+    if (errors.email) {
+      notifyMessage(errors.email);
     } else if (errors.password) {
       notifyMessage(errors.password);
     } else {
       navigation.replace('DashboardScreen', {
-        emailOrUsername: formFields.emailOrUsername,
+        email: formFields.email,
       });
     }
   };
   return (
     <>
       <StatusBar backgroundColor={Colors.BLACK} />
-
-      {/* <SafeAreaView style={styles.container}> */}
       <KeyboardAvoidingView style={styles.container} behavior="height">
         <ScrollView>
           <Text style={styles.headingTxt}>{MESSAGES.SIGN_IN}</Text>
           <View style={styles.textInputContainer}>
             <CTextInput
               placeholder={TEXT_INPUT_PLACEHOLDER.EMAIL_USERNAME}
-              onChangeText={text =>
-                setFormFields({...formFields, emailOrUsername: text})
-              }
+              onChangeText={text => setFormFields({...formFields, email: text})}
             />
             <CTextInput
               placeholder={TEXT_INPUT_PLACEHOLDER.PASSWORD}
@@ -122,7 +115,6 @@ const LoginScreen = () => {
           <CButton title={BUTTON_TITLE.GOOGLE} extraStyles={styles.googleBtn} />
         </View>
       </View>
-      {/* </SafeAreaView> */}
     </>
   );
 };

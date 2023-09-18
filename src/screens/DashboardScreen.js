@@ -10,7 +10,8 @@ import {HEADER_TITLE, MESSAGES} from '../constants/messages';
 const DashboardScreen = ({navigation}) => {
   const route = useRoute();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const {emailOrUsername} = route.params;
+  // const {emailOrUsername} = route.params;
+const {email}=route.params
 
   return (
     <View style={styles.container}>
@@ -22,7 +23,7 @@ const DashboardScreen = ({navigation}) => {
       <View style={styles.welcomeTxtContainer}>
         <Text style={styles.welcomeTxt}>
           {MESSAGES.WELCOME_MESSGE_FIRST}
-          <Text style={styles.emailOrUsernameTxt}> {emailOrUsername}</Text>{' '}
+          <Text style={styles.emailOrUsernameTxt}> {email} </Text>
           {MESSAGES.WELCOME_MESSGE_LAST}
         </Text>
       </View>

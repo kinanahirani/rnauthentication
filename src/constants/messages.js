@@ -26,6 +26,7 @@ export const MESSAGES = {
   LOGOUT_CONFIRMATION: 'Are you sure you want to logout?',
   EMAIL_VERIFICATION: 'Email verification',
   SIGN_OUT: 'Sign Out',
+  EMAIL_SENT:'Email for reset password sent successfully'
 };
 
 //This variable contains validation messages
@@ -40,6 +41,8 @@ export const VALIDATION_MESSAGES = {
   PLEASE_ENTER_EMAIL_OR_USERNAME: 'Please enter email id or username',
   PLEASE_SELECT_TERMS_AND_CONDITIONS: 'Please select terms and conditions',
   INVALID_EMAIL: 'Invalid email',
+  INAVLID_PASSWORD:
+    ' Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit',
 };
 
 //This variable contains all button's titles
@@ -60,5 +63,5 @@ export const BUTTON_TITLE = {
 
 export const HEADER_TITLE = {
   AUTHENTICATION_DEMO: 'AuthenticationDemo',
-  EMAIL_VERIFICATION:'Email Verification'
+  EMAIL_VERIFICATION: 'Email Verification',
 };

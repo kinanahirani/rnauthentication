@@ -28,6 +28,7 @@ import {
   VALIDATION_MESSAGES,
 } from '../constants/messages';
 import {notifyMessage} from '../helpers/toastMessageHelpers';
+import {validateEmail} from '../helpers/validationHelpers';
 
 const SignUpScreen = ({navigation}) => {
   const [checkboxIsSelected, setCheckboxIsSelected] = useState(false);
@@ -40,21 +41,8 @@ const SignUpScreen = ({navigation}) => {
   const [formErrors, setFormErrors] = useState({});
 
   const toggleCheckBox = () => {
-    console.log(checkboxIsSelected);
+    console.log(!checkboxIsSelected);
     setCheckboxIsSelected(!checkboxIsSelected);
-  };
-
-  const validatePassword = password => {
-    // Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-    return passwordPattern.test(password);
-  };
-
-  // Helper function for email validation
-  const validateEmail = email => {
-    // Simple email validation regex pattern
-    const emailPattern = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
-    return emailPattern.test(email);
   };
 
   const handleAuthentication = () => {
@@ -71,8 +59,6 @@ const SignUpScreen = ({navigation}) => {
 
     if (!formFields.password) {
       errors.password = VALIDATION_MESSAGES.PLEASE_ENTER_PASSWORD;
-    } else if (!validatePassword(formFields.password)) {
-      errors.password = VALIDATION_MESSAGES.INVALID_EMAIL;
     }
 
     if (!formFields.confirmPassword) {
@@ -83,26 +69,33 @@ const SignUpScreen = ({navigation}) => {
         VALIDATION_MESSAGES.CONFIRM_PASSWORD_SHOULD_MATCH_WITH_PASSWORD;
     }
 
-    if (!formFields.checkboxIsSelected) {
+    if (formFields.checkboxIsSelected) {
       errors.checkboxIsSelected =
         VALIDATION_MESSAGES.PLEASE_SELECT_TERMS_AND_CONDITIONS;
     }
     // Set the errors in the formError state
     setFormErrors(errors);
 
-    // If there are errors, stop submitting the form
-    if (Object.keys(errors).length > 0) {
-      Object.keys(errors).forEach(key => {
-        notifyMessage(errors[key]);
+    if (errors.name) {
+      notifyMessage(errors.name);
+    } else if (errors.email) {
+      notifyMessage(errors.email);
+    } else if (errors.password) {
+      notifyMessage(errors.password);
+    } else if (errors.confirmPassword) {
+      notifyMessage(errors.confirmPassword);
+    } else if (errors.checkboxIsSelected) {
+      notifyMessage(errors.checkboxIsSelected);
+    } else {
+      navigation.replace('EmailVerificationScreen', {
+        email: formFields.email,
       });
-      return;
     }
   };
 
   return (
     <>
       <StatusBar backgroundColor={Colors.BLACK} />
-      {/* <SafeAreaView style={styles.container}> */}
       <KeyboardAvoidingView style={styles.container} behavior="height">
         <ScrollView>
           <Text style={styles.headingTxt}>{MESSAGES.SIGN_UP}</Text>
@@ -175,7 +168,6 @@ const SignUpScreen = ({navigation}) => {
           <CButton title={BUTTON_TITLE.GOOGLE} extraStyles={styles.googleBtn} />
         </View>
       </View>
-      {/* </SafeAreaView> */}
     </>
   );
 };

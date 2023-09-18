@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Colors} from '../theme/colors';
 import CButton from '../components/CButton';
 import CTextInput from '../components/CTextInput';
@@ -9,8 +9,29 @@ import {
   BUTTON_TITLE,
   TEXT_INPUT_PLACEHOLDER,
 } from '../constants/messages';
+import {validateEmail} from '../helpers/validationHelpers';
 
 const ForgotPasswordScreen = () => {
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
+
+  const handleAuthentication = () => {
+    const errors = {};
+
+    if (!email) {
+      errors.email = VALIDATION_MESSAGES.PLEASE_ENTER_EMAIL_ID;
+    } else if (!validateEmail(email)) {
+      errors.email = VALIDATION_MESSAGES.PLEASE_ENTER_VALID_EMAIL_ID;
+    }
+
+    setEmailError(errors);
+
+    if (errors.email) {
+      notifyMessage(errors.email);
+    } else {
+      notifyMessage(MESSAGES.EMAIL_SENT);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.headingTxt}>{MESSAGES.FORGOT_PASSWORD}</Text>
@@ -18,10 +39,13 @@ const ForgotPasswordScreen = () => {
         {MESSAGES.FORGOT_PASSWORD_SUBTITLE}
       </Text>
       <View style={styles.textInputContainer}>
-        <CTextInput placeholder={TEXT_INPUT_PLACEHOLDER.EMAIL} />
+        <CTextInput
+          placeholder={TEXT_INPUT_PLACEHOLDER.EMAIL}
+          onChangeText={text => setEmail(text)}
+        />
       </View>
       <View style={styles.sendBtnContainer}>
-        <CButton title={BUTTON_TITLE.SEND} />
+        <CButton title={BUTTON_TITLE.SEND} onPress={handleAuthentication}/>
       </View>
     </SafeAreaView>
   );
