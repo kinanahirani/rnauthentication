@@ -17,9 +17,9 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import {
-  horizontalScale,
   moderateScale,
   verticalScale,
+  horizontalScale,
 } from '../helpers/sizeHelpers';
 import {
   MESSAGES,
@@ -83,6 +83,10 @@ const SignUpScreen = ({navigation}) => {
         VALIDATION_MESSAGES.CONFIRM_PASSWORD_SHOULD_MATCH_WITH_PASSWORD;
     }
 
+    if (!formFields.checkboxIsSelected) {
+      errors.checkboxIsSelected =
+        VALIDATION_MESSAGES.PLEASE_SELECT_TERMS_AND_CONDITIONS;
+    }
     // Set the errors in the formError state
     setFormErrors(errors);
 

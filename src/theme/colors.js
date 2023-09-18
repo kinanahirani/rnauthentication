@@ -6,5 +6,7 @@ export const Colors = {
   GRAY:'rgba(128,128,128,0.7)',
   WHITE:'white',
   BLUE:'blue',
-  RED:'red'
+  RED:'red',
+  LIGHT_BLACK:'rgba(0, 0, 0, 0.6)',
+  LINK_COLOR:'#0000EE'
 };

@@ -57,6 +57,10 @@ const LoginScreen = () => {
       notifyMessage(errors.emailOrUsername);
     } else if (errors.password) {
       notifyMessage(errors.password);
+    } else {
+      navigation.replace('DashboardScreen', {
+        emailOrUsername: formFields.emailOrUsername,
+      });
     }
   };
   return (
@@ -156,7 +160,7 @@ const styles = StyleSheet.create({
     color: Colors.BLACK,
   },
   signUpSubTxt: {
-    color: Colors.BLUE,
+    color: Colors.LINK_COLOR,
     textDecorationLine: 'underline',
     fontSize: moderateScale(14),
   },
