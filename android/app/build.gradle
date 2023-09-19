@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.rnauthentication"
+    namespace "com.tridhyatech.reusable.authentication.rn"
     defaultConfig {
-        applicationId "com.rnauthentication"
+        applicationId "com.tridhyatech.reusable.authentication.rn"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

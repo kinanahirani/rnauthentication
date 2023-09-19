@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">rnauthentication</string>
+    <string name="app_name">Authentication demo</string>
     <string name="facebook_app_id">1522534091820767</string>
     <string name="facebook_client_token">ce10bd5002776de640e5fdcd27d46781</string>
 </resources>

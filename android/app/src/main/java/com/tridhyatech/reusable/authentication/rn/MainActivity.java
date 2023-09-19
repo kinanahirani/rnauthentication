@@ -1,4 +1,4 @@
-package com.rnauthentication;
+package com.tridhyatech.reusable.authentication.rn;
 import android.os.Bundle;
 
 import com.facebook.react.ReactActivity;
@@ -14,7 +14,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "rnauthentication";
+    return "Authentication demo";
   }
 
   /**
