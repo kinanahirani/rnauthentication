@@ -5,7 +5,7 @@ import {moderateScale, verticalScale} from '../helpers/sizeHelpers';
 
 const CButton = ({title, extraStyles, onPress}) => {
   return (
-    <TouchableOpacity style={[styles.btn, extraStyles]} onPress={onPress}>
+    <TouchableOpacity style={[styles.btn, extraStyles]} onPress={onPress} activeOpacity={0.7}>
       <Text style={styles.btnText}>{title}</Text>
     </TouchableOpacity>
   );

@@ -3,7 +3,7 @@ import {Colors} from '../theme/colors';
 import CButton from '../components/CButton';
 import CHeader from '../components/CHeader';
 import {useRoute} from '@react-navigation/native';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, SafeAreaView} from 'react-native';
 import {moderateScale, verticalScale} from '../helpers/sizeHelpers';
 import {BUTTON_TITLE, HEADER_TITLE, MESSAGES} from '../constants/messages';
 
@@ -12,7 +12,7 @@ const EmailVerificationScreen = ({navigation}) => {
   const {email} = route.params;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <CHeader title={HEADER_TITLE.EMAIL_VERIFICATION} />
       <View style={styles.welcomeTxtContainer}>
         <Text style={styles.welcomeTxt}>
@@ -23,10 +23,10 @@ const EmailVerificationScreen = ({navigation}) => {
         <CButton
           title={BUTTON_TITLE.CONTINUE}
           extraStyles={{width: '90%', marginTop: verticalScale(15)}}
-          onPress={()=>navigation.replace('DashboardScreen',{email})}
+          onPress={() => navigation.replace('DashboardScreen', {email})}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

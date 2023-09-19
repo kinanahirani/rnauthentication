@@ -8,8 +8,10 @@ import {
   MESSAGES,
   BUTTON_TITLE,
   TEXT_INPUT_PLACEHOLDER,
+  VALIDATION_MESSAGES,
 } from '../constants/messages';
 import {validateEmail} from '../helpers/validationHelpers';
+import { notifyMessage } from '../helpers/toastMessageHelpers';
 
 const ForgotPasswordScreen = () => {
   const [email, setEmail] = useState('');

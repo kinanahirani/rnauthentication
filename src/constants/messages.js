@@ -5,6 +5,7 @@ export const TEXT_INPUT_PLACEHOLDER = {
   PASSWORD: 'Password',
   CONFIRM_PASSWORD: 'Confirm Password',
   EMAIL: 'Email id',
+  ID:'id'
 };
 
 //This variable contains all text for UI
@@ -26,7 +27,8 @@ export const MESSAGES = {
   LOGOUT_CONFIRMATION: 'Are you sure you want to logout?',
   EMAIL_VERIFICATION: 'Email verification',
   SIGN_OUT: 'Sign Out',
-  EMAIL_SENT:'Email for reset password sent successfully'
+  EMAIL_SENT:'Email for reset password sent successfully',
+  COMPLETE_PROFILE:'Complete Profile'
 };
 
 //This variable contains validation messages
@@ -59,6 +61,7 @@ export const BUTTON_TITLE = {
   CANCEL: 'Cancel',
   FACEBOOK: 'Facebook',
   GOOGLE: 'Google',
+  PROCEED:'Proceed'
 };
 
 export const HEADER_TITLE = {

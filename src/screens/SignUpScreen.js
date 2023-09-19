@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Colors} from '../theme/colors';
 import CButton from '../components/CButton';
 import CTextInput from '../components/CTextInput';
@@ -29,6 +29,8 @@ import {
 } from '../constants/messages';
 import {notifyMessage} from '../helpers/toastMessageHelpers';
 import {validateEmail} from '../helpers/validationHelpers';
+import {useRoute} from '@react-navigation/native';
+import {handleFacebookSignIn} from '../helpers/loginHelpers';
 
 const SignUpScreen = ({navigation}) => {
   const [checkboxIsSelected, setCheckboxIsSelected] = useState(false);
@@ -39,6 +41,19 @@ const SignUpScreen = ({navigation}) => {
     confirmPassword: '',
   });
   const [formErrors, setFormErrors] = useState({});
+  const [isUserAvailedSocialLogin, setIsUserAvailedSocialLogin] =
+    useState(false);
+  const [userDataFromSocialLogin, setUserDataFromSocialLogin] = useState({});
+  const route = useRoute();
+
+  useEffect(() => {
+    if (route.params && route.params.data) {
+      setIsUserAvailedSocialLogin(true);
+      setUserDataFromSocialLogin(route.params.data);
+    } else {
+      setIsUserAvailedSocialLogin(false);
+    }
+  }, []);
 
   const toggleCheckBox = () => {
     console.log(!checkboxIsSelected);
@@ -93,81 +108,174 @@ const SignUpScreen = ({navigation}) => {
     }
   };
 
+  const handleSocialLogin = () => {
+    const errors = {};
+    if (!userDataFromSocialLogin.name) {
+      errors.name = VALIDATION_MESSAGES.PLEASE_ENTER_NAME;
+    }
+
+    if (formFields.checkboxIsSelected) {
+      errors.checkboxIsSelected =
+        VALIDATION_MESSAGES.PLEASE_SELECT_TERMS_AND_CONDITIONS;
+    }
+    // Set the errors in the formError state
+    setFormErrors(errors);
+
+    if (errors.name) {
+      notifyMessage(errors.name);
+    } else if (errors.email) {
+      notifyMessage(errors.email);
+    } else if (errors.checkboxIsSelected) {
+      notifyMessage(errors.checkboxIsSelected);
+    } else {
+      navigation.replace('EmailVerificationScreen', {
+        email: userDataFromSocialLogin.email,
+      });
+    }
+  };
+
   return (
     <>
       <StatusBar backgroundColor={Colors.BLACK} />
-      <KeyboardAvoidingView style={styles.container} behavior="height">
-        <ScrollView>
-          <Text style={styles.headingTxt}>{MESSAGES.SIGN_UP}</Text>
-          <View style={styles.textInputContainer}>
-            <CTextInput
-              placeholder={TEXT_INPUT_PLACEHOLDER.NAME}
-              onChangeText={text => setFormFields({...formFields, name: text})}
-            />
-            <CTextInput
-              placeholder={TEXT_INPUT_PLACEHOLDER.EMAIL}
-              onChangeText={text => setFormFields({...formFields, email: text})}
-            />
-            <CTextInput
-              placeholder={TEXT_INPUT_PLACEHOLDER.PASSWORD}
-              isPassword={true}
-              onChangeText={text =>
-                setFormFields({...formFields, password: text})
-              }
-            />
-            <CTextInput
-              placeholder={TEXT_INPUT_PLACEHOLDER.CONFIRM_PASSWORD}
-              isPassword={true}
-              onChangeText={text =>
-                setFormFields({...formFields, confirmPassword: text})
-              }
-            />
-          </View>
+      <SafeAreaView style={styles.container}>
+        <KeyboardAvoidingView style={{}} behavior="height">
+          {isUserAvailedSocialLogin ? (
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Text style={styles.headingTxt}>{MESSAGES.COMPLETE_PROFILE}</Text>
+              <View style={styles.textInputContainer}>
+                <CTextInput
+                  placeholder={TEXT_INPUT_PLACEHOLDER.ID}
+                  editable={false}
+                  value={userDataFromSocialLogin.id}
+                />
+                <CTextInput
+                  placeholder={TEXT_INPUT_PLACEHOLDER.NAME}
+                  value={userDataFromSocialLogin.name}
+                  onChangeText={text =>
+                    setUserDataFromSocialLogin({
+                      ...userDataFromSocialLogin,
+                      name: text,
+                    })
+                  }
+                />
+                <CTextInput
+                  placeholder={TEXT_INPUT_PLACEHOLDER.EMAIL}
+                  editable={false}
+                  value={userDataFromSocialLogin.email}
+                />
+              </View>
 
-          <View style={styles.termsAndConditionsContainer}>
-            <TouchableOpacity
-              onPress={toggleCheckBox}
-              style={styles.checkBoxBtn}>
-              <Image
-                source={
-                  checkboxIsSelected
-                    ? require('../assets/images/checkbox-on.png')
-                    : require('../assets/images/checkbox-off.png')
-                }
-                style={styles.checkBoxImg}
-              />
-            </TouchableOpacity>
+              <View style={styles.termsAndConditionsContainer}>
+                <TouchableOpacity
+                  onPress={toggleCheckBox}
+                  style={styles.checkBoxBtn}>
+                  <Image
+                    source={
+                      checkboxIsSelected
+                        ? require('../assets/images/checkbox-on.png')
+                        : require('../assets/images/checkbox-off.png')
+                    }
+                    style={styles.checkBoxImg}
+                  />
+                </TouchableOpacity>
 
-            <Text style={styles.signUpMainTxt}>
-              {MESSAGES.I_AGREE_TERMS_AND_CONDITIONS}
-              <Text
-                onPress={() => navigation.navigate('SignUpScreen')}
-                style={styles.signUpSubTxt}>
-                {' '}
-                {BUTTON_TITLE.TERMS_CONDITIONS}
-              </Text>
-            </Text>
-          </View>
-          <View style={styles.signInBtnContainer}>
-            <CButton
-              title={BUTTON_TITLE.SIGN_UP}
-              onPress={handleAuthentication}
-            />
-          </View>
-          <View style={styles.emptySpace} />
-        </ScrollView>
-      </KeyboardAvoidingView>
+                <Text style={styles.signUpMainTxt}>
+                  {MESSAGES.I_AGREE_TERMS_AND_CONDITIONS}
+                  <Text
+                    onPress={() => navigation.navigate('SignUpScreen')}
+                    style={styles.signUpSubTxt}>
+                    {' '}
+                    {BUTTON_TITLE.TERMS_CONDITIONS}
+                  </Text>
+                </Text>
+              </View>
+              <View style={styles.signInBtnContainer}>
+                <CButton
+                  title={BUTTON_TITLE.PROCEED}
+                  onPress={handleSocialLogin}
+                />
+              </View>
+              <View style={styles.emptySpace} />
+            </ScrollView>
+          ) : (
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Text style={styles.headingTxt}>{MESSAGES.SIGN_UP}</Text>
+              <View style={styles.textInputContainer}>
+                <CTextInput
+                  placeholder={TEXT_INPUT_PLACEHOLDER.NAME}
+                  onChangeText={text =>
+                    setFormFields({...formFields, name: text})
+                  }
+                />
+                <CTextInput
+                  placeholder={TEXT_INPUT_PLACEHOLDER.EMAIL}
+                  onChangeText={text =>
+                    setFormFields({...formFields, email: text})
+                  }
+                />
+                <CTextInput
+                  placeholder={TEXT_INPUT_PLACEHOLDER.PASSWORD}
+                  isPassword={true}
+                  onChangeText={text =>
+                    setFormFields({...formFields, password: text})
+                  }
+                />
+                <CTextInput
+                  placeholder={TEXT_INPUT_PLACEHOLDER.CONFIRM_PASSWORD}
+                  isPassword={true}
+                  onChangeText={text =>
+                    setFormFields({...formFields, confirmPassword: text})
+                  }
+                />
+              </View>
 
-      <View style={styles.bottomViewContainer}>
+              <View style={styles.termsAndConditionsContainer}>
+                <TouchableOpacity
+                  onPress={toggleCheckBox}
+                  style={styles.checkBoxBtn}>
+                  <Image
+                    source={
+                      checkboxIsSelected
+                        ? require('../assets/images/checkbox-on.png')
+                        : require('../assets/images/checkbox-off.png')
+                    }
+                    style={styles.checkBoxImg}
+                  />
+                </TouchableOpacity>
+
+                <Text style={styles.signUpMainTxt}>
+                  {MESSAGES.I_AGREE_TERMS_AND_CONDITIONS}
+                  <Text
+                    onPress={() => navigation.navigate('SignUpScreen')}
+                    style={styles.signUpSubTxt}>
+                    {' '}
+                    {BUTTON_TITLE.TERMS_CONDITIONS}
+                  </Text>
+                </Text>
+              </View>
+              <View style={styles.signInBtnContainer}>
+                <CButton
+                  title={BUTTON_TITLE.SIGN_UP}
+                  onPress={handleAuthentication}
+                />
+              </View>
+              <View style={styles.emptySpace} />
+            </ScrollView>
+          )}
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+
+      {!isUserAvailedSocialLogin && <View style={styles.bottomViewContainer}>
         <Text style={styles.signUpMainTxt}>{MESSAGES.OR_SIGN_IN_WITH}</Text>
         <View style={styles.bottomContainer}>
           <CButton
             title={BUTTON_TITLE.FACEBOOK}
             extraStyles={styles.facebookBtn}
+            onPress={() => handleFacebookSignIn({navigation})}
           />
           <CButton title={BUTTON_TITLE.GOOGLE} extraStyles={styles.googleBtn} />
         </View>
-      </View>
+      </View>}
     </>
   );
 };
@@ -183,7 +291,7 @@ const styles = StyleSheet.create({
   headingTxt: {
     fontSize: moderateScale(20),
     color: Colors.BLACK,
-    marginTop: verticalScale(20),
+    marginTop: verticalScale(45),
   },
   textInputContainer: {
     marginTop: verticalScale(15),
@@ -230,11 +338,11 @@ const styles = StyleSheet.create({
     marginLeft: horizontalScale(10),
   },
   checkBoxImg: {
-    width: horizontalScale(20),
-    height: verticalScale(20),
+    width: horizontalScale(24),
+    height: verticalScale(24),
   },
   emptySpace: {
-    height: verticalScale(120),
+    height: verticalScale(140),
   },
   bottomViewContainer: {
     padding: moderateScale(20),

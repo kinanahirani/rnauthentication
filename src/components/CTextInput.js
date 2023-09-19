@@ -13,7 +13,7 @@ import {
   horizontalScale,
 } from '../helpers/sizeHelpers';
 
-const CTextInput = ({placeholder, isPassword, onChangeText}) => {
+const CTextInput = ({placeholder, isPassword, onChangeText, editable, value}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -26,6 +26,8 @@ const CTextInput = ({placeholder, isPassword, onChangeText}) => {
         style={styles.textInput}
         secureTextEntry={isPassword && !showPassword}
         onChangeText={onChangeText}
+        editable={editable}
+        value={value}
       />
       {isPassword && (
         <TouchableOpacity
@@ -59,6 +61,9 @@ const styles = StyleSheet.create({
   textInput: {
     marginLeft: horizontalScale(5),
     flex: 1,
+    paddingVertical: moderateScale(10),
+    fontSize: moderateScale(16),
+    color:Colors.BLACK
   },
   eyeIconContainer: {
     padding: moderateScale(10),

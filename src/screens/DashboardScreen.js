@@ -3,18 +3,18 @@ import {Colors} from '../theme/colors';
 import CModal from '../components/CModal';
 import CHeader from '../components/CHeader';
 import {useRoute} from '@react-navigation/native';
-import {StyleSheet, Text, View} from 'react-native';
 import {moderateScale} from '../helpers/sizeHelpers';
 import {HEADER_TITLE, MESSAGES} from '../constants/messages';
+import {StyleSheet, Text, View, SafeAreaView} from 'react-native';
 
 const DashboardScreen = ({navigation}) => {
   const route = useRoute();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   // const {emailOrUsername} = route.params;
-const {email}=route.params
+  const {email} = route.params;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <CHeader
         title={HEADER_TITLE.AUTHENTICATION_DEMO}
         visibleLogoutButton={true}
@@ -34,7 +34,7 @@ const {email}=route.params
           showLogoutModal={showLogoutModal}
         />
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
