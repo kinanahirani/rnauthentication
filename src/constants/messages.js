@@ -68,3 +68,7 @@ export const HEADER_TITLE = {
   AUTHENTICATION_DEMO: 'AuthenticationDemo',
   EMAIL_VERIFICATION: 'Email Verification',
 };
+
+export const GOOGLE_AUTH={
+  CLIENT_ID:'27671943337-enbkjg2lov62t7a987c60tf5ogv0d5mo.apps.googleusercontent.com'
+}

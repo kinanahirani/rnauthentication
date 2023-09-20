@@ -3,28 +3,21 @@ import {
   GoogleSignin,
 } from '@react-native-google-signin/google-signin';
 import {
-  LoginManager,
   AccessToken,
+  LoginManager,
   GraphRequest,
   GraphRequestManager,
 } from 'react-native-fbsdk-next';
 
-GoogleSignin.configure({
-  webClientId:
-    '27671943337-enbkjg2lov62t7a987c60tf5ogv0d5mo.apps.googleusercontent.com',
-  offlineAccess: true,
-  forceCodeForRefreshToken: true,
-});
-
-export const handleGoogleSignIn = async () => {
+export const handleGoogleSignIn = async ({navigation}) => {
   try {
     await GoogleSignin.hasPlayServices();
     await GoogleSignin.signOut();
     const userInfo = await GoogleSignin.signIn();
-    console.log('userLog >>>', userInfo);
     if (userInfo) {
       console.log('Successfully signed in');
       console.log(userInfo, '..userInfo');
+      navigation.navigate('SignUpScreen', {data: userInfo.user});
     }
   } catch (error) {
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -49,6 +42,7 @@ export const handleFacebookSignIn = async ({navigation}) => {
       'public_profile',
       'email',
     ]);
+    let token;
 
     if (result.isCancelled) {
       console.log('Facebook login canceled');
@@ -58,19 +52,21 @@ export const handleFacebookSignIn = async ({navigation}) => {
         console.log('Something went wrong obtaining access token');
       } else {
         console.log('Facebook login success');
-        console.log('data: ', data);
         console.log('Access Token:', data.accessToken);
+        token = data.accessToken;
       }
-
-      const parameters = {
-        fields: 'id,name,email', // Specify the fields you want to retrieve
-        access_token: data.accessToken,
-      };
 
       // Create a Graph API request
       const graphRequest = new GraphRequest(
         '/me',
-        parameters,
+        {
+          token,
+          parameters: {
+            fields: {
+              string: 'id,name,email',
+            },
+          },
+        },
         (error, user) => {
           if (error) {
             console.error('Error fetching user data:', error);
@@ -80,7 +76,6 @@ export const handleFacebookSignIn = async ({navigation}) => {
               name: user.name,
               email: user.email,
             };
-            console.log('User data:', user);
             console.log('User ID:', user.id);
             console.log('User Name:', user.name);
             console.log('User Email:', user.email);

@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
 import {Colors} from '../theme/colors';
 import CButton from '../components/CButton';
+import React, {useState, useEffect} from 'react';
 import CTextInput from '../components/CTextInput';
 import {
   View,
@@ -26,11 +26,20 @@ import {
   BUTTON_TITLE,
   TEXT_INPUT_PLACEHOLDER,
   VALIDATION_MESSAGES,
+  GOOGLE_AUTH,
 } from '../constants/messages';
-import {notifyMessage} from '../helpers/toastMessageHelpers';
-import {validateEmail} from '../helpers/validationHelpers';
 import {useRoute} from '@react-navigation/native';
-import {handleFacebookSignIn} from '../helpers/loginHelpers';
+import {validateEmail} from '../helpers/validationHelpers';
+import {notifyMessage} from '../helpers/toastMessageHelpers';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {
+  handleFacebookSignIn,
+  handleGoogleSignIn,
+} from '../helpers/loginHelpers';
+
+GoogleSignin.configure({
+  webClientId: GOOGLE_AUTH.CLIENT_ID,
+});
 
 const SignUpScreen = ({navigation}) => {
   const [checkboxIsSelected, setCheckboxIsSelected] = useState(false);
@@ -47,13 +56,17 @@ const SignUpScreen = ({navigation}) => {
   const route = useRoute();
 
   useEffect(() => {
+    GoogleSignin.configure();
+  }, []);
+
+  useEffect(() => {
     if (route.params && route.params.data) {
       setIsUserAvailedSocialLogin(true);
       setUserDataFromSocialLogin(route.params.data);
     } else {
       setIsUserAvailedSocialLogin(false);
     }
-  }, []);
+  }, [route.params]);
 
   const toggleCheckBox = () => {
     console.log(!checkboxIsSelected);
@@ -84,7 +97,7 @@ const SignUpScreen = ({navigation}) => {
         VALIDATION_MESSAGES.CONFIRM_PASSWORD_SHOULD_MATCH_WITH_PASSWORD;
     }
 
-    if (formFields.checkboxIsSelected) {
+    if (!checkboxIsSelected) {
       errors.checkboxIsSelected =
         VALIDATION_MESSAGES.PLEASE_SELECT_TERMS_AND_CONDITIONS;
     }
@@ -102,7 +115,7 @@ const SignUpScreen = ({navigation}) => {
     } else if (errors.checkboxIsSelected) {
       notifyMessage(errors.checkboxIsSelected);
     } else {
-      navigation.replace('EmailVerificationScreen', {
+      navigation.navigate('EmailVerificationScreen', {
         email: formFields.email,
       });
     }
@@ -114,7 +127,7 @@ const SignUpScreen = ({navigation}) => {
       errors.name = VALIDATION_MESSAGES.PLEASE_ENTER_NAME;
     }
 
-    if (formFields.checkboxIsSelected) {
+    if (!checkboxIsSelected) {
       errors.checkboxIsSelected =
         VALIDATION_MESSAGES.PLEASE_SELECT_TERMS_AND_CONDITIONS;
     }
@@ -128,7 +141,7 @@ const SignUpScreen = ({navigation}) => {
     } else if (errors.checkboxIsSelected) {
       notifyMessage(errors.checkboxIsSelected);
     } else {
-      navigation.replace('EmailVerificationScreen', {
+      navigation.navigate('EmailVerificationScreen', {
         email: userDataFromSocialLogin.email,
       });
     }
@@ -265,17 +278,23 @@ const SignUpScreen = ({navigation}) => {
         </KeyboardAvoidingView>
       </SafeAreaView>
 
-      {!isUserAvailedSocialLogin && <View style={styles.bottomViewContainer}>
-        <Text style={styles.signUpMainTxt}>{MESSAGES.OR_SIGN_IN_WITH}</Text>
-        <View style={styles.bottomContainer}>
-          <CButton
-            title={BUTTON_TITLE.FACEBOOK}
-            extraStyles={styles.facebookBtn}
-            onPress={() => handleFacebookSignIn({navigation})}
-          />
-          <CButton title={BUTTON_TITLE.GOOGLE} extraStyles={styles.googleBtn} />
+      {!isUserAvailedSocialLogin && (
+        <View style={styles.bottomViewContainer}>
+          <Text style={styles.signUpMainTxt}>{MESSAGES.OR_SIGN_IN_WITH}</Text>
+          <View style={styles.bottomContainer}>
+            <CButton
+              title={BUTTON_TITLE.FACEBOOK}
+              extraStyles={styles.facebookBtn}
+              onPress={() => handleFacebookSignIn({navigation})}
+            />
+            <CButton
+              title={BUTTON_TITLE.GOOGLE}
+              extraStyles={styles.googleBtn}
+              onPress={() => handleGoogleSignIn({navigation})}
+            />
+          </View>
         </View>
-      </View>}
+      )}
     </>
   );
 };
@@ -342,7 +361,7 @@ const styles = StyleSheet.create({
     height: verticalScale(24),
   },
   emptySpace: {
-    height: verticalScale(140),
+    height: verticalScale(120),
   },
   bottomViewContainer: {
     padding: moderateScale(20),

@@ -10,7 +10,6 @@ import {StyleSheet, Text, View, SafeAreaView} from 'react-native';
 const DashboardScreen = ({navigation}) => {
   const route = useRoute();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  // const {emailOrUsername} = route.params;
   const {email} = route.params;
 
   return (

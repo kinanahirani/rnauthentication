@@ -16,25 +16,21 @@ import {
 import {moderateScale, verticalScale} from '../helpers/sizeHelpers';
 import {
   MESSAGES,
+  GOOGLE_AUTH,
   BUTTON_TITLE,
-  TEXT_INPUT_PLACEHOLDER,
   VALIDATION_MESSAGES,
+  TEXT_INPUT_PLACEHOLDER,
 } from '../constants/messages';
-import {notifyMessage} from '../helpers/toastMessageHelpers';
 import {validateEmail} from '../helpers/validationHelpers';
-// import {handleGoogleSignIn} from '../helpers/loginHelpers';
+import {notifyMessage} from '../helpers/toastMessageHelpers';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {
-  GoogleSignin,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
-import {handleFacebookSignIn, handleGoogleSignIn} from '../helpers/loginHelpers';
+  handleGoogleSignIn,
+  handleFacebookSignIn,
+} from '../helpers/loginHelpers';
 
 GoogleSignin.configure({
-  // scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-  webClientId:
-    '27671943337-9m6uecn2usai07qr25dnftdd7pum7l8p.apps.googleusercontent.com',
-  offlineAccess: true,
-  forceCodeForRefreshToken: true,
+  webClientId: GOOGLE_AUTH.CLIENT_ID,
 });
 
 const LoginScreen = () => {
@@ -44,6 +40,10 @@ const LoginScreen = () => {
     password: '',
   });
   const [formErrors, setFormErrors] = useState({});
+  
+  useEffect(() => {
+    GoogleSignin.configure();
+  }, []);
 
   const handleAuthentication = () => {
     const errors = {};
@@ -72,36 +72,6 @@ const LoginScreen = () => {
       navigation.replace('DashboardScreen', {
         email: formFields.email,
       });
-    }
-  };
-
-  useEffect(() => {
-    GoogleSignin.configure();
-  }, []);
-
-  const googleSigninBtn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      await GoogleSignin.signOut();
-
-      const userInfo = await GoogleSignin.signIn();
-      console.log('userInfo >>>', userInfo);
-      if (userInfo) {
-        console.log('userInfo', userInfo);
-      }
-    } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log('Error(googleSignIn1): ', JSON.stringify(error));
-        // user cancelled the login flow
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log('Error(googleSignIn2): ', JSON.stringify(error));
-        // operation (e.g. sign in) is in progress already
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        console.log('Error(googleSignIn3): ', JSON.stringify(error));
-        // play services not available or outdated
-      } else {
-        console.log('Error(googleSignIn4): ', JSON.stringify(error)); // some other error happened
-      }
     }
   };
 
@@ -166,7 +136,6 @@ const LoginScreen = () => {
             title={BUTTON_TITLE.GOOGLE}
             extraStyles={styles.googleBtn}
             onPress={() => handleGoogleSignIn({navigation})}
-            // onPress={() => googleSigninBtn()}
           />
         </View>
       </View>

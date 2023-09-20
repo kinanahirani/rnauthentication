@@ -2,6 +2,5 @@
     <string name="app_name">Authentication demo</string>
     <string name="facebook_app_id">1095029118142552</string>
     <string name="facebook_client_token">ac7b2ec6c5c5246701d231f4ffc956c9</string>
-    <string name="server_client_id">27671943337-enbkjg2lov62t7a987c60tf5ogv0d5mo.apps.googleusercontent.com</string>
     <string name="fb_login_protocol_scheme">fb1095029118142552</string>
 </resources>
