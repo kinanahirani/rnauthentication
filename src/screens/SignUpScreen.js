@@ -7,6 +7,7 @@ import {
   Text,
   Image,
   Alert,
+  Linking,
   Platform,
   StatusBar,
   ScrollView,
@@ -36,9 +37,10 @@ import {
   handleFacebookSignIn,
   handleGoogleSignIn,
 } from '../helpers/loginHelpers';
+import CHeader from '../components/CHeader';
 
 GoogleSignin.configure({
-  webClientId: GOOGLE_AUTH.CLIENT_ID,
+  webClientId: GOOGLE_AUTH.RELEASE_BUILD_CLIENT_ID,
 });
 
 const SignUpScreen = ({navigation}) => {
@@ -49,7 +51,6 @@ const SignUpScreen = ({navigation}) => {
     password: '',
     confirmPassword: '',
   });
-  const [formErrors, setFormErrors] = useState({});
   const [isUserAvailedSocialLogin, setIsUserAvailedSocialLogin] =
     useState(false);
   const [userDataFromSocialLogin, setUserDataFromSocialLogin] = useState({});
@@ -101,8 +102,6 @@ const SignUpScreen = ({navigation}) => {
       errors.checkboxIsSelected =
         VALIDATION_MESSAGES.PLEASE_SELECT_TERMS_AND_CONDITIONS;
     }
-    // Set the errors in the formError state
-    setFormErrors(errors);
 
     if (errors.name) {
       notifyMessage(errors.name);
@@ -118,6 +117,13 @@ const SignUpScreen = ({navigation}) => {
       navigation.navigate('EmailVerificationScreen', {
         email: formFields.email,
       });
+      setFormFields({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+      });
+      setCheckboxIsSelected(false);
     }
   };
 
@@ -131,8 +137,6 @@ const SignUpScreen = ({navigation}) => {
       errors.checkboxIsSelected =
         VALIDATION_MESSAGES.PLEASE_SELECT_TERMS_AND_CONDITIONS;
     }
-    // Set the errors in the formError state
-    setFormErrors(errors);
 
     if (errors.name) {
       notifyMessage(errors.name);
@@ -150,8 +154,9 @@ const SignUpScreen = ({navigation}) => {
   return (
     <>
       <StatusBar backgroundColor={Colors.BLACK} />
-      <SafeAreaView style={styles.container}>
-        <KeyboardAvoidingView style={{}} behavior="height">
+      <SafeAreaView style={{flexGrow: 1, backgroundColor: Colors.WHITE}}>
+        <CHeader backButton={true} onPress={() => navigation.goBack()} />
+        <KeyboardAvoidingView style={styles.container} behavior="height">
           {isUserAvailedSocialLogin ? (
             <ScrollView showsVerticalScrollIndicator={false}>
               <Text style={styles.headingTxt}>{MESSAGES.COMPLETE_PROFILE}</Text>
@@ -195,7 +200,9 @@ const SignUpScreen = ({navigation}) => {
                 <Text style={styles.signUpMainTxt}>
                   {MESSAGES.I_AGREE_TERMS_AND_CONDITIONS}
                   <Text
-                    onPress={() => navigation.navigate('SignUpScreen')}
+                    onPress={() => {
+                      Linking.openURL('https://www.google.com'); // Open google.com when "Terms & Conditions" is pressed
+                    }}
                     style={styles.signUpSubTxt}>
                     {' '}
                     {BUTTON_TITLE.TERMS_CONDITIONS}
@@ -216,18 +223,21 @@ const SignUpScreen = ({navigation}) => {
               <View style={styles.textInputContainer}>
                 <CTextInput
                   placeholder={TEXT_INPUT_PLACEHOLDER.NAME}
+                  value={formFields.name}
                   onChangeText={text =>
                     setFormFields({...formFields, name: text})
                   }
                 />
                 <CTextInput
                   placeholder={TEXT_INPUT_PLACEHOLDER.EMAIL}
+                  value={formFields.email}
                   onChangeText={text =>
                     setFormFields({...formFields, email: text})
                   }
                 />
                 <CTextInput
                   placeholder={TEXT_INPUT_PLACEHOLDER.PASSWORD}
+                  value={formFields.password}
                   isPassword={true}
                   onChangeText={text =>
                     setFormFields({...formFields, password: text})
@@ -236,6 +246,7 @@ const SignUpScreen = ({navigation}) => {
                 <CTextInput
                   placeholder={TEXT_INPUT_PLACEHOLDER.CONFIRM_PASSWORD}
                   isPassword={true}
+                  value={formFields.confirmPassword}
                   onChangeText={text =>
                     setFormFields({...formFields, confirmPassword: text})
                   }
@@ -259,7 +270,9 @@ const SignUpScreen = ({navigation}) => {
                 <Text style={styles.signUpMainTxt}>
                   {MESSAGES.I_AGREE_TERMS_AND_CONDITIONS}
                   <Text
-                    onPress={() => navigation.navigate('SignUpScreen')}
+                    onPress={() => {
+                      Linking.openURL('https://www.google.com'); // Open google.com when "Terms & Conditions" is pressed
+                    }}
                     style={styles.signUpSubTxt}>
                     {' '}
                     {BUTTON_TITLE.TERMS_CONDITIONS}
@@ -303,14 +316,14 @@ export default SignUpScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    // flexGrow: 1,
+    // backgroundColor: Colors.WHITE,
     padding: moderateScale(20),
-    backgroundColor: Colors.WHITE,
   },
   headingTxt: {
     fontSize: moderateScale(20),
     color: Colors.BLACK,
-    marginTop: verticalScale(45),
+    // marginTop: verticalScale(45),
   },
   textInputContainer: {
     marginTop: verticalScale(15),

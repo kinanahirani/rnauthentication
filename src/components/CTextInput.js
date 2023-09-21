@@ -13,7 +13,13 @@ import {
   horizontalScale,
 } from '../helpers/sizeHelpers';
 
-const CTextInput = ({placeholder, isPassword, onChangeText, editable, value}) => {
+const CTextInput = ({
+  placeholder,
+  isPassword,
+  onChangeText,
+  editable,
+  value,
+}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -63,13 +69,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: moderateScale(10),
     fontSize: moderateScale(16),
-    color:Colors.BLACK
+    color: Colors.BLACK,
   },
   eyeIconContainer: {
     padding: moderateScale(10),
-    // position: 'absolute',
-    // top: verticalScale(15),
-    // right: horizontalScale(10),
   },
   eyeIcon: {
     width: moderateScale(20),

@@ -1,16 +1,30 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Colors} from '../theme/colors';
 import CModal from '../components/CModal';
 import CHeader from '../components/CHeader';
 import {useRoute} from '@react-navigation/native';
 import {moderateScale} from '../helpers/sizeHelpers';
 import {HEADER_TITLE, MESSAGES} from '../constants/messages';
-import {StyleSheet, Text, View, SafeAreaView} from 'react-native';
+import {StyleSheet, Text, View, SafeAreaView, BackHandler} from 'react-native';
 
 const DashboardScreen = ({navigation}) => {
   const route = useRoute();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const {email} = route.params;
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        BackHandler.exitApp();
+        return true;
+      },
+    );
+
+    return () => {
+      backHandler.remove();
+    };
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

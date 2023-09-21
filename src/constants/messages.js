@@ -70,5 +70,6 @@ export const HEADER_TITLE = {
 };
 
 export const GOOGLE_AUTH={
-  CLIENT_ID:'27671943337-enbkjg2lov62t7a987c60tf5ogv0d5mo.apps.googleusercontent.com'
+  CLIENT_ID:'27671943337-enbkjg2lov62t7a987c60tf5ogv0d5mo.apps.googleusercontent.com',
+  RELEASE_BUILD_CLIENT_ID:'27671943337-khleh2h965g2lm9d5a43usudo5gcb5d9.apps.googleusercontent.com'
 }

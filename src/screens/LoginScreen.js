@@ -12,6 +12,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   KeyboardAvoidingView,
+  BackHandler,
 } from 'react-native';
 import {moderateScale, verticalScale} from '../helpers/sizeHelpers';
 import {
@@ -30,7 +31,7 @@ import {
 } from '../helpers/loginHelpers';
 
 GoogleSignin.configure({
-  webClientId: GOOGLE_AUTH.CLIENT_ID,
+  webClientId: GOOGLE_AUTH.RELEASE_BUILD_CLIENT_ID,
 });
 
 const LoginScreen = () => {
@@ -39,10 +40,21 @@ const LoginScreen = () => {
     email: '',
     password: '',
   });
-  const [formErrors, setFormErrors] = useState({});
-  
+
   useEffect(() => {
     GoogleSignin.configure();
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        BackHandler.exitApp();
+        return true;
+      },
+    );
+
+    return () => {
+      backHandler.remove();
+    };
   }, []);
 
   const handleAuthentication = () => {
@@ -61,14 +73,15 @@ const LoginScreen = () => {
       errors.password = VALIDATION_MESSAGES.PLEASE_ENTER_PASSWORD;
     }
 
-    // Set the errors in the formError state
-    setFormErrors(errors);
-
     if (errors.email) {
       notifyMessage(errors.email);
     } else if (errors.password) {
       notifyMessage(errors.password);
     } else {
+      setFormFields({
+        email: '',
+        password: '',
+      });
       navigation.replace('DashboardScreen', {
         email: formFields.email,
       });
@@ -85,6 +98,7 @@ const LoginScreen = () => {
             <View style={styles.textInputContainer}>
               <CTextInput
                 placeholder={TEXT_INPUT_PLACEHOLDER.EMAIL_USERNAME}
+                value={formFields.email}
                 onChangeText={text =>
                   setFormFields({...formFields, email: text})
                 }
@@ -92,6 +106,7 @@ const LoginScreen = () => {
               <CTextInput
                 placeholder={TEXT_INPUT_PLACEHOLDER.PASSWORD}
                 isPassword={true}
+                value={formFields.password}
                 onChangeText={text =>
                   setFormFields({...formFields, password: text})
                 }

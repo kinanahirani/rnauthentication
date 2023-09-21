@@ -13,7 +13,11 @@ const EmailVerificationScreen = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <CHeader title={HEADER_TITLE.EMAIL_VERIFICATION} />
+      <CHeader
+        title={HEADER_TITLE.EMAIL_VERIFICATION}
+        backButton={true}
+        onPress={() => navigation.goBack()}
+      />
       <View style={styles.welcomeTxtContainer}>
         <Text style={styles.welcomeTxt}>
           {MESSAGES.VERIFICATION_EMAIL_SEND_FIRST}
