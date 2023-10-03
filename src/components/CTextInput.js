@@ -13,12 +13,15 @@ import {
   horizontalScale,
 } from '../helpers/sizeHelpers';
 
+//Custom TextInput
 const CTextInput = ({
   placeholder,
   isPassword,
   onChangeText,
   editable,
   value,
+  keyboardType,
+  autoCapitalize,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -34,6 +37,8 @@ const CTextInput = ({
         onChangeText={onChangeText}
         editable={editable}
         value={value}
+        keyboardType={keyboardType}
+        autoCapitalize={autoCapitalize}
       />
       {isPassword && (
         <TouchableOpacity

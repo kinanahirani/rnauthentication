@@ -148,13 +148,14 @@ const SignUpScreen = ({navigation}) => {
       navigation.navigate('EmailVerificationScreen', {
         email: userDataFromSocialLogin.email,
       });
+      setCheckboxIsSelected(false)
     }
   };
 
   return (
     <>
       <StatusBar backgroundColor={Colors.BLACK} />
-      <SafeAreaView style={{flexGrow: 1, backgroundColor: Colors.WHITE}}>
+      <SafeAreaView style={{flexGrow: 1, backgroundColor: Colors.WHITE,}}>
         <CHeader backButton={true} onPress={() => navigation.goBack()} />
         <KeyboardAvoidingView style={styles.container} behavior="height">
           {isUserAvailedSocialLogin ? (
@@ -234,6 +235,8 @@ const SignUpScreen = ({navigation}) => {
                   onChangeText={text =>
                     setFormFields({...formFields, email: text})
                   }
+                  keyboardType="email-address" 
+                  autoCapitalize="none"
                 />
                 <CTextInput
                   placeholder={TEXT_INPUT_PLACEHOLDER.PASSWORD}

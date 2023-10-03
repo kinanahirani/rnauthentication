@@ -16,6 +16,7 @@ import {
   horizontalScale,
 } from '../helpers/sizeHelpers';
 
+//Custom Modal
 const CModal = ({navigation, onOutsidePress, showLogoutModal}) => {
   const handleLogout = async () => {
     onOutsidePress();

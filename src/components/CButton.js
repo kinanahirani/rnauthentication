@@ -3,6 +3,7 @@ import React from 'react';
 import {Colors} from '../theme/colors';
 import {moderateScale, verticalScale} from '../helpers/sizeHelpers';
 
+//Custom button 
 const CButton = ({title, extraStyles, onPress}) => {
   return (
     <TouchableOpacity style={[styles.btn, extraStyles]} onPress={onPress} activeOpacity={0.7}>

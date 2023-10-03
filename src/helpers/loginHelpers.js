@@ -9,6 +9,7 @@ import {
   GraphRequestManager,
 } from 'react-native-fbsdk-next';
 
+//Google login 
 export const handleGoogleSignIn = async ({navigation}) => {
   try {
     await GoogleSignin.hasPlayServices();
@@ -36,6 +37,7 @@ export const handleGoogleSignIn = async ({navigation}) => {
   }
 };
 
+//Facebook login
 export const handleFacebookSignIn = async ({navigation}) => {
   try {
     const result = await LoginManager.logInWithPermissions([

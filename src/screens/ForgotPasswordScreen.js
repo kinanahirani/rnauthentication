@@ -46,6 +46,8 @@ const ForgotPasswordScreen = ({navigation}) => {
             <CTextInput
               placeholder={TEXT_INPUT_PLACEHOLDER.EMAIL}
               onChangeText={text => setEmail(text)}
+              keyboardType="email-address"
+              autoCapitalize="none"
             />
           </View>
           <View style={styles.sendBtnContainer}>

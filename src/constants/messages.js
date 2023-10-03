@@ -64,11 +64,12 @@ export const BUTTON_TITLE = {
   PROCEED:'Proceed'
 };
 
+//This variable contains all header titles
 export const HEADER_TITLE = {
   AUTHENTICATION_DEMO: 'AuthenticationDemo',
   EMAIL_VERIFICATION: 'Email Verification',
 };
-
+//This variable contains google client ids for google signin
 export const GOOGLE_AUTH={
   CLIENT_ID:'27671943337-enbkjg2lov62t7a987c60tf5ogv0d5mo.apps.googleusercontent.com',
   RELEASE_BUILD_CLIENT_ID:'27671943337-khleh2h965g2lm9d5a43usudo5gcb5d9.apps.googleusercontent.com'

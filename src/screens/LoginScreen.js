@@ -102,6 +102,8 @@ const LoginScreen = () => {
                 onChangeText={text =>
                   setFormFields({...formFields, email: text})
                 }
+                keyboardType="email-address"
+                autoCapitalize="none"
               />
               <CTextInput
                 placeholder={TEXT_INPUT_PLACEHOLDER.PASSWORD}
