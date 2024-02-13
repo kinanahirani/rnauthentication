@@ -94,11 +94,17 @@ android {
         //     keyAlias 'authentication'
         //     keyPassword 'authentication'
         // }
-         release {
-            storeFile file('D:/authentication-keystore.jks')
-            storePassword 'authentication'
-            keyAlias 'authentication'
-            keyPassword 'authentication'
+        //  release {
+        //     storeFile file('D:/authentication-keystore.jks')
+        //     storePassword 'authentication'
+        //     keyAlias 'authentication'
+        //     keyPassword 'authentication'
+        // }
+        release {
+            storeFile file('D:/rnauthentication/android/rnauthentication.keystore')
+            storePassword 'rnauthentication'
+            keyAlias 'rnauthentication'
+            keyPassword 'rnauthentication'
         }
     }
     buildTypes {
